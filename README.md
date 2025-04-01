@@ -44,6 +44,8 @@ The backend will run on `http://localhost:3000`.
 2. Create a new cluster and database.
 3. Get the connection string and replace `your-mongodb-atlas-connection-string` in the `.env` file.
 4. Make sure to allow access from your IP in MongoDB Atlas Network settings.
+5. add .env file in your system and paste this code (MONGO_URI=mongodb+srv://lanson123:lanson44444@cluster0.xujm4nr.mongodb.net/myDatabase)
+
 
 ## API Endpoints
 
