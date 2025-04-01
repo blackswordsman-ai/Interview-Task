@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Billing Transaction</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Add Billing Transaction</h2>
+        
+        <form action="/api/add" method="POST">
+            <label for="referralName">Referral Name:</label>
+            <input type="text" id="referralName" name="referralName" required>
+
+            <label>Monthly Data (Enter Amounts)</label>
+            <input type="number" name="Jan" placeholder="January" required>
+            <input type="number" name="Feb" placeholder="February" required>
+            <input type="number" name="Mar" placeholder="March" required>
+            <input type="number" name="Apr" placeholder="April" required>
+            <input type="number" name="May" placeholder="May" required>
+            <input type="number" name="Jun" placeholder="June" required>
+            <input type="number" name="Jul" placeholder="July" required>
+            <input type="number" name="Aug" placeholder="August" required>
+            <input type="number" name="Sep" placeholder="September" required>
+            <input type="number" name="Oct" placeholder="October" required>
+            <input type="number" name="Nov" placeholder="November" required>
+            <input type="number" name="Dec" placeholder="December" required>
+
+            <button type="submit">Add Transaction</button>
+        </form>
+        
+        <a href="/">Back to Report</a>
+    </div>
+</body>
+</html>

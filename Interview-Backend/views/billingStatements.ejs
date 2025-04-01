@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing Statements</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Billing Statements</h2>
+
+        <!-- Filters: Date Range & Client Name Search -->
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <label for="fromDate">From Date:</label>
+                <input type="date" id="fromDate" class="form-control">
+            </div>
+            <div class="col-md-3">
+                <label for="toDate">To Date:</label>
+                <input type="date" id="toDate" class="form-control">
+            </div>
+            <div class="col-md-3">
+                <label for="clientName">Search Client Name:</label>
+                <input type="text" id="clientName" class="form-control" placeholder="Enter client name">
+            </div>
+            <div class="col-md-3 mt-4">
+                <button class="btn btn-primary w-100" onclick="filterTable()">Search</button>
+            </div>
+        </div>
+
+        <!-- Export Buttons -->
+        <div class="mb-3">
+            <a href="/api/billing-statements/export/excel" class="btn btn-success">Export to Excel</a>
+            <a href="/api/billing-statements/export/pdf" class="btn btn-danger">Export to PDF</a>
+        </div>
+
+        <!-- Table -->
+        <table class="table table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>S.No</th>
+                    <th>From Date</th>
+                    <th>To Date</th>
+                    <th>Client Name</th>
+                    <th>Total Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (billingStatements.length > 0) { %>
+                    <% billingStatements.forEach((statement, index) => { %>
+                        <tr>
+                            <td><%= index + 1 %></td>
+                            <td><%= new Date(statement.fromDate).toLocaleDateString() %></td>
+                            <td><%= new Date(statement.toDate).toLocaleDateString() %></td>
+                            <td><%= statement.clientName %></td>
+                            <td><%= statement.totalAmount.toFixed(2) %></td>
+                        </tr>
+                    <% }) %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="5" class="text-center">No records found</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function filterTable() {
+            let fromDate = document.getElementById("fromDate").value;
+            let toDate = document.getElementById("toDate").value;
+            let clientName = document.getElementById("clientName").value.toLowerCase();
+
+            let rows = document.querySelectorAll("tbody tr");
+
+            rows.forEach(row => {
+                let rowFromDate = new Date(row.cells[1].innerText);
+                let rowToDate = new Date(row.cells[2].innerText);
+                let rowClientName = row.cells[3].innerText.toLowerCase();
+
+                let showRow = true;
+
+                if (fromDate && rowFromDate < new Date(fromDate)) {
+                    showRow = false;
+                }
+                if (toDate && rowToDate > new Date(toDate)) {
+                    showRow = false;
+                }
+                if (clientName && !rowClientName.includes(clientName)) {
+                    showRow = false;
+                }
+
+                row.style.display = showRow ? "" : "none";
+            });
+        }
+    </script>
+</body>
+</html>

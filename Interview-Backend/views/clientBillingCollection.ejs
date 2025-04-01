@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Billing Collection</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h2 class="text-center mb-4">Client Billing Collection</h2>
+
+        <!-- Search and Date Filters -->
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <input type="text" id="searchBox" class="form-control" placeholder="Search by Client/Patient Name">
+            </div>
+            <div class="col-md-3">
+                <input type="date" id="startDate" class="form-control">
+            </div>
+            <div class="col-md-3">
+                <input type="date" id="endDate" class="form-control">
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-primary w-100" onclick="filterData()">Search</button>
+            </div>
+        </div>
+
+        <!-- Export Buttons -->
+        <div class="mb-3">
+            <a href="/api/client-billing/export?format=excel" class="btn btn-success">Export to Excel</a>
+            <a href="/api/client-billing/export?format=pdf" class="btn btn-danger">Export to PDF</a>
+        </div>
+
+        <!-- Billing Collection Table -->
+        <table class="table table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>S.No</th>
+                    <th>Patient Name</th>
+                    <th>Patient ID</th>
+                    <th>Visit Date</th>
+                    <th>Visit ID</th>
+                    <th>Client Name</th>
+                    <th>Test Name</th>
+                    <th>MRP</th>
+                    <th>Discount Amount</th>
+                    <th>Net Amount</th>
+                    <th>Collected Amount</th>
+                    <th>Due Amount</th>
+                    <th>B2B</th>
+                    <th>Difference Amount</th>
+                    <th>B2B PL Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (billingCollections.length > 0) { %>
+                    <% billingCollections.forEach((bill, index) => { %>
+                        <tr>
+                            <td><%= index + 1 %></td>
+                            <td><%= bill.patientName %></td>
+                            <td><%= bill.patientId %></td>
+                            <td><%= new Date(bill.visitDate).toLocaleDateString() %></td>
+                            <td><%= bill.visitId %></td>
+                            <td><%= bill.clientName %></td>
+                            <td><%= bill.testName %></td>
+                            <td><%= bill.mrp %></td>
+                            <td><%= bill.discountAmount %></td>
+                            <td><%= bill.netAmount %></td>
+                            <td><%= bill.collectedAmount %></td>
+                            <td><%= bill.dueAmount %></td>
+                            <td><%= bill.b2b %></td>
+                            <td><%= bill.differenceAmount %></td>
+                            <td><%= bill.b2bPlName %></td>
+                        </tr>
+                    <% }) %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="15" class="text-center">No records found</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function filterData() {
+            let search = document.getElementById("searchBox").value;
+            let startDate = document.getElementById("startDate").value;
+            let endDate = document.getElementById("endDate").value;
+
+            let url = `/api/client-billing?search=${search}&startDate=${startDate}&endDate=${endDate}`;
+            window.location.href = url;
+        }
+    </script>
+</body>
+</html>

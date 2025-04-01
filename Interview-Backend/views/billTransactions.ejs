@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bill Transaction Report</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Bill Transaction Report</h2>
+
+        <!-- Dropdowns and Search -->
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <label for="referralType">Referral Type:</label>
+                <select id="referralType" class="form-control" onchange="filterTable()">
+                    <option value="">Select</option>
+                    <% referralTypes.forEach(type => { %>
+                        <option value="<%= type %>"><%= type %></option>
+                    <% }) %>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="branch">Select Branch:</label>
+                <select id="branch" class="form-control" onchange="filterTable()">
+                    <option value="">Select</option>
+                    <% branches.forEach(branch => { %>
+                        <option value="<%= branch %>"><%= branch %></option>
+                    <% }) %>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="clientName">Search Client Name:</label>
+                <input type="text" id="clientName" class="form-control" placeholder="Enter client name" onkeyup="filterTable()">
+            </div>
+        </div>
+
+        <!-- Export Buttons -->
+        <div class="mb-3">
+            <a href="/api/bill-transactions/export/excel" class="btn btn-success">Export to Excel</a>
+            <a href="/api/bill-transactions/export/pdf" class="btn btn-danger">Export to PDF</a>
+        </div>
+
+        <!-- Table -->
+        <table class="table table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>S.No</th>
+                    <th>Receipt Number</th>
+                    <th>Patient Name</th>
+                    <th>Client Name</th>
+                    <th>Visit Date</th>
+                    <th>Visit ID</th>
+                    <th>Gross Amount</th>
+                    <th>Discount</th>
+                    <th>Net Amount</th>
+                    <th>Paid Amount</th>
+                    <th>Due Amount</th>
+                    <th>Payment Mode</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (transactions.length > 0) { %>
+                    <% transactions.forEach((transaction, index) => { %>
+                        <tr>
+                            <td><%= index + 1 %></td>
+                            <td><%= transaction.receiptNumber %></td>
+                            <td><%= transaction.patientName %></td>
+                            <td><%= transaction.clientName %></td>
+                            <td><%= new Date(transaction.visitDate).toLocaleDateString() %></td>
+                            <td><%= transaction.visitId %></td>
+                            <td><%= transaction.grossAmount.toFixed(2) %></td>
+                            <td><%= transaction.discount.toFixed(2) %></td>
+                            <td><%= transaction.netAmount.toFixed(2) %></td>
+                            <td><%= transaction.paidAmount.toFixed(2) %></td>
+                            <td><%= (transaction.netAmount - transaction.paidAmount).toFixed(2) %></td>
+                            <td><%= transaction.paymentMode %></td>
+                        </tr>
+                    <% }) %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="12" class="text-center">No records found</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function filterTable() {
+            let clientNameInput = document.getElementById("clientName").value.toLowerCase();
+            let referralTypeInput = document.getElementById("referralType").value.toLowerCase();
+            let branchInput = document.getElementById("branch").value.toLowerCase();
+            let rows = document.querySelectorAll("tbody tr");
+
+            rows.forEach(row => {
+                let clientName = row.cells[3].innerText.toLowerCase();
+                let display = true;
+
+                if (clientNameInput && !clientName.includes(clientNameInput)) {
+                    display = false;
+                }
+                if (referralTypeInput && !row.innerText.toLowerCase().includes(referralTypeInput)) {
+                    display = false;
+                }
+                if (branchInput && !row.innerText.toLowerCase().includes(branchInput)) {
+                    display = false;
+                }
+
+                row.style.display = display ? "" : "none";
+            });
+        }
+    </script>
+</body>
+</html>

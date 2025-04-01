@@ -1,0 +1,26 @@
+/* Custom styles to enhance the Bootstrap layout */
+body, html {
+  height: 100%;
+}
+
+/* Make navbar full height */
+.bg-light {
+  min-height: 100vh;
+}
+
+/* Remove default link styling */
+.nav-link {
+  color: inherit !important;
+}
+
+/* Add some hover effects */
+.nav-item:hover {
+  background-color: #e9ecef;
+  border-radius: 4px;
+}
+
+/* Adjust padding for better spacing */
+.p-4 {
+  padding: 1.5rem !important;
+}
+

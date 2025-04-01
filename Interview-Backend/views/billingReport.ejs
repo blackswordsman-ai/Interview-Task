@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing Transaction Report</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Billing Transaction Report</h2>
+
+        <!-- Filter Options -->
+        <form action="/" method="GET" class="mb-4">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label for="doctor" class="form-label">Doctor:</label>
+                    <input type="text" name="doctor" id="doctor" class="form-control" placeholder="Enter doctor name">
+                </div>
+                <div class="col-md-4">
+                    <label for="reportType" class="form-label">Report Type:</label>
+                    <select name="reportType" id="reportType" class="form-select">
+                        <option value="outstanding">Outstanding</option>
+                        <option value="paid">Paid</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="financialYear" class="form-label">Financial Year:</label>
+                    <select name="financialYear" id="financialYear" class="form-select">
+                        <option value="2023-2024">2023-2024</option>
+                        <option value="2024-2025">2024-2025</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Filter</button>
+        </form>
+
+        <!-- Table for Billing Transactions -->
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>S. No.</th>
+                        <th>Referral Name</th>
+                        <th>Jan</th>
+                        <th>Feb</th>
+                        <th>Mar</th>
+                        <th>Apr</th>
+                        <th>May</th>
+                        <th>Jun</th>
+                        <th>Jul</th>
+                        <th>Aug</th>
+                        <th>Sep</th>
+                        <th>Oct</th>
+                        <th>Nov</th>
+                        <th>Dec</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (transactions.length > 0) { %>
+                        <% transactions.forEach((transaction, index) => { %>
+                            <tr>
+                                <td><%= index + 1 %></td>
+                                <td><%= transaction.referralName %></td>
+                                <td><%= transaction.monthlyData.Jan %></td>
+                                <td><%= transaction.monthlyData.Feb %></td>
+                                <td><%= transaction.monthlyData.Mar %></td>
+                                <td><%= transaction.monthlyData.Apr %></td>
+                                <td><%= transaction.monthlyData.May %></td>
+                                <td><%= transaction.monthlyData.Jun %></td>
+                                <td><%= transaction.monthlyData.Jul %></td>
+                                <td><%= transaction.monthlyData.Aug %></td>
+                                <td><%= transaction.monthlyData.Sep %></td>
+                                <td><%= transaction.monthlyData.Oct %></td>
+                                <td><%= transaction.monthlyData.Nov %></td>
+                                <td><%= transaction.monthlyData.Dec %></td>
+                                <td><%= transaction.total %></td>
+                            </tr>
+                        <% }) %>
+                    <% } else { %>
+                        <tr class="text-center">
+                            <td colspan="15">No records found</td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Export Options -->
+        <div class="d-flex justify-content-end mt-3">
+            <a href="/api/transactions/export-pdf" class="btn btn-danger me-2">Export to PDF</a>
+            <a href="/api/transactions/export-excel" class="btn btn-success">Export to Excel</a>
+        </div>
+
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
+
